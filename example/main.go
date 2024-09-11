@@ -2,22 +2,23 @@ package main
 
 import (
 	"fmt"
-	prctl "github.com/wl102/go-prctl"
 	"log"
 	"os"
 	"os/signal"
+
+	prctl "github.com/wl102/go-prctl"
 )
 
 func main() {
-	wait := make(chan os.Signal, 1)
-	signal.Notify(wait, os.Interrupt)
-
 	prName := "newname"
-
+	// make sure first running
 	err := prctl.SetProcessName(prName)
 	if err != nil {
 		log.Println(err)
 	}
+
+	wait := make(chan os.Signal, 1)
+	signal.Notify(wait, os.Interrupt)
 
 	name, err := prctl.GetProcessName()
 	if err != nil {
